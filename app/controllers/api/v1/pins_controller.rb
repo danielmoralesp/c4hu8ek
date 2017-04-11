@@ -1,6 +1,6 @@
 class Api::V1::PinsController < ApplicationController
 
-  before_filter :restrict_access
+  before_filter :authenticate
 
   def index
     render json: Pin.all.order('created_at DESC')
@@ -20,8 +20,4 @@ class Api::V1::PinsController < ApplicationController
       params.require(:pin).permit(:title, :image_url)
     end
 
-    def restrict_access
-      user = User.find_by(email: params[:email])
-      head :unauthorized unless user && user.api_token == params[:api_token]
-    end
 end
